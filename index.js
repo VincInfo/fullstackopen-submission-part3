@@ -1,6 +1,16 @@
 const { response, json } = require('express')
 const express = require('express')
 const app = express()
+app.use(express.json())
+const morgan = require('morgan')
+// app.use(morgan('tiny'))
+
+morgan.token('content', function getId (req) {
+    return JSON.stringify(req.body)
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
+
+
 
 let persons = [
     {
@@ -63,13 +73,20 @@ app.post('/api/persons', (request, response) => {
     const body = request.body
 
     // console.log(body);
-    if (!body.name) {
+    const duplicate = persons.find(p => p.name === body.name)
+    if(duplicate){
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+    if (!body.name || !body.number) {
       return response.status(400).json({ 
         error: 'content missing' 
       })
     }
     const person = {
-      id: body.id,
+      id: generateId(),
+    //   id: body.id,
       name: body.name,
       number: body.number,
     }
