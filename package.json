@@ -7,8 +7,10 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "proxy": "http://localhost:3001"
-
+    "build:ui": "rm -rf build && cd ../fullstackopen-submissions/part2/phonebook/ && npm run build && cp -r build ../../../fullstackopen-submission-part3",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",    
+    "logs:prod": "fly logs"
   },
   "repository": {
     "type": "git",
