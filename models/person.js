@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
-const uniqueValidator = rquire('mongoose-unique-validator')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const url = process.env.MONGODB_URI
 
@@ -25,24 +25,24 @@ const personSchema = new mongoose.Schema({
     type: String, 
     minLength: 8,
     required: [true, 'Please enter a number'],
-    // validate: {
-    //     validator: function(v) {
-    //         console.log('hier bin ich ' + v.length)
-    //         const numberLength = v.length
-    //         if(v.includes("-")){
-    //             if(v.charAt(2) === '-'){
-    //                 return /\d{2}-\d{v.length - 3}/.test(v)
-    //             }else if(v.charAt(3) === '-'){
-    //                 return /\d{3}-\d{v.length - 4}/.test(v)
-    //             }
-    //             return false
-    //         }else {
+    validate: {
+      validator: function(v) {
+        // console.log('hier bin ich ' + v.length)
+        // const numberLength = v.length
+        if(v.includes('-')){
+          if(v.charAt(2) === '-'){
+            return /\d{2}-\d{v.length - 3}/.test(v)
+          }else if(v.charAt(3) === '-'){
+            return /\d{3}-\d{v.length - 4}/.test(v)
+          }
+          return false
+        }else {
                     
-    //             return /\d{Number(v.length)}/.test(v)
-    //         }
-    //     }, 
-    //     message: props => `${props.value} is not a valid phone number`
-    // }
+          return /\d{Number(v.length)}/.test(v)
+        }
+      }, 
+      message: props => `${props.value} is not a valid phone number`
+    }
   }
 })
 
