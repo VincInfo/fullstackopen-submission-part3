@@ -27,8 +27,18 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-  const myDate = new Date()
-  response.send('<p>Phonebook has info for 2 people <br></br>' + myDate + '</p>')
+  const currentDate = new Date().toLocaleString();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  Person.find({}).then(persons => {
+      response.send(
+          `<div>
+              <p>Phonebook has info for ${persons.length} people</p>
+          </div>
+          <div>
+              <p>${currentDate} (${timeZone})</p>
+          </div>`
+      )
+      })
 })
 
 app.get('/api/persons/:id', (request, response) => {
